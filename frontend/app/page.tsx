@@ -51,7 +51,7 @@ export default async function TransactionsDashboard({ searchParams }: { searchPa
         {monthData && <MonthlyChart data={monthData} />}
       </div>
 
-      {!txData || txData.items.length === 0 ? (
+      {!txData || !txData.items || txData.items.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem 0', color: '#8c8f96', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--border-radius)', border: '1px solid var(--border)' }}>
           <h3>No transactions found</h3>
           <p>Try adjusting your filters or checking back later.</p>

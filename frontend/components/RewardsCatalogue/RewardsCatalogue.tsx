@@ -31,7 +31,8 @@ export function RewardsCatalogue({ rewards, initialBalance }: Props) {
     setIsRedeeming(true);
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/redeem', {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://digital-alpha-c0si.onrender.com";
+      const res = await fetch(`${API_BASE_URL}/api/redeem`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: '00000000-0000-0000-0000-000000000000', reward_id: selectedReward.id })
