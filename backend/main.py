@@ -3,8 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
-from . import crud, models, schemas
-from .database import engine, get_db
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from backend import crud, models, schemas
+from backend.database import engine, get_db
 
 # Create all tables (if they don't exist)
 models.Base.metadata.create_all(bind=engine)

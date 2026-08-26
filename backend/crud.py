@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract
-from . import models, schemas
+from backend import models, schemas
 from fastapi import HTTPException
 
 def get_transactions(db: Session, user_id: str, skip: int = 0, limit: int = 100, category: str = None, month: str = None):
