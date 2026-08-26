@@ -4,7 +4,7 @@ import { MonthlyChart } from '@/components/Charts/MonthlyChart';
 import { TransactionsList } from '@/components/TransactionsList';
 
 async function getData(endpoint: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "https://digital-alpha-c0si.onrender.com";
   try {
     const res = await fetch(`${baseUrl}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) {
