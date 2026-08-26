@@ -31,7 +31,7 @@ export function MonthlyChart({ data }: { data: ChartData[] }) {
           <XAxis dataKey="month" stroke="#8c8f96" fontSize={12} tickMargin={10} />
           <YAxis stroke="#8c8f96" fontSize={12} tickFormatter={(value) => `$${value}`} />
           <Tooltip 
-            formatter={(value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)}
+            formatter={(value: any) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)}
             contentStyle={{ backgroundColor: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: 'var(--radius-md)' }}
             cursor={{ fill: 'rgba(255,255,255,0.05)' }}
           />

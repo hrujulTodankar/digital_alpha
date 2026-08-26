@@ -38,7 +38,7 @@ export function CategoryChart({ data }: { data: ChartData[] }) {
             ))}
           </Pie>
           <Tooltip 
-            formatter={(value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)}
+            formatter={(value: any) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)}
             contentStyle={{ backgroundColor: 'var(--background)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: 'var(--radius-md)' }}
           />
           <Legend />
