@@ -74,7 +74,10 @@ def seed_database():
         db.flush() 
         
         print("Seeding transactions...")
-        with open("backend/transactions.json", "r") as f:
+        import os
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        json_path = os.path.join(current_dir, "transactions.json")
+        with open(json_path, "r") as f:
             tx_data = json.load(f)
             
         txs = []
