@@ -37,3 +37,7 @@
 **Context:** Render Deployment failing to connect to Postgres.  
 **Flawed Output:** SQLAlchemy crashed on deployment with `sqlalchemy.exc.InterfaceError: (pg8000.exceptions.InterfaceError) Can't create a connection to host localhost and port 5432`.  
 **Reason for Fix:** Render dynamically injects `DATABASE_URL` with the `postgres://` dialect prefix. However, modern SQLAlchemy exclusively requires the `postgresql://` prefix (or `postgresql+pg8000://`), and our backend was incorrectly falling back to `localhost:5432` because `os.environ.get("DATABASE_URL")` was failing initialization on the unsupported dialect. Added a string replacement safety check to dynamically convert `postgres://` to `postgresql://` before passing the URI to `create_engine`.
+
+**Context:** Render Deployment crashing due to missing psycopg2 driver.  
+**Flawed Output:** SQLAlchemy crashed with `ModuleNotFoundError: No module named 'psycopg2'`.  
+**Reason for Fix:** While we previously fixed the `postgres://` prefix to `postgresql://`, SQLAlchemy defaults to looking for the `psycopg2` driver when it sees `postgresql://`. Because we specifically chose to use `pg8000` (and added it to `requirements.txt`) to avoid C-compiler dependency issues, we needed to force SQLAlchemy to use it in production. I updated the `DATABASE_URL` dynamic parser to replace both `postgres://` and `postgresql://` with `postgresql+pg8000://`.
