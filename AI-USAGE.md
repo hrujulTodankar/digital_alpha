@@ -41,3 +41,7 @@
 **Context:** Render Deployment crashing due to missing psycopg2 driver.  
 **Flawed Output:** SQLAlchemy crashed with `ModuleNotFoundError: No module named 'psycopg2'`.  
 **Reason for Fix:** While we previously fixed the `postgres://` prefix to `postgresql://`, SQLAlchemy defaults to looking for the `psycopg2` driver when it sees `postgresql://`. Because we specifically chose to use `pg8000` (and added it to `requirements.txt`) to avoid C-compiler dependency issues, we needed to force SQLAlchemy to use it in production. I updated the `DATABASE_URL` dynamic parser to replace both `postgres://` and `postgresql://` with `postgresql+pg8000://`.
+
+**Context:** Render Deployment timing out connecting to Supabase via pg8000.  
+**Flawed Output:** SQLAlchemy crashed with SSL Handshake timeouts because `pg8000` does not default to SSL, but Supabase requires it.  
+**Reason for Fix:** Managed PostgreSQL instances like Supabase enforce secure SSL connections. Without explicit SSL configuration, the `pg8000` connection hangs indefinitely or fails. I updated `backend/database.py` to conditionally inject `connect_args={"ssl_context": ssl_ctx}` into `create_engine` only when running in production (where `DATABASE_URL` is set). The SSL context uses `ssl.create_default_context()` with relaxed verification for compatibility, while keeping the local connection free of SSL constraints.
