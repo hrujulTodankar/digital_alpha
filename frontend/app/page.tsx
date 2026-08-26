@@ -9,12 +9,12 @@ async function getData(endpoint: string) {
     const res = await fetch(`${baseUrl}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) {
       console.error(`[Data Fetch Error] ${endpoint} returned ${res.status} ${res.statusText}`);
-      return null;
+      return { error: `HTTP ${res.status}: ${res.statusText}` };
     }
     return res.json();
-  } catch (error) { 
+  } catch (error: any) { 
     console.error(`[Network Error] Failed to fetch ${endpoint}:`, error);
-    return null; 
+    return { error: `Network Error: ${error.message || 'Unknown'}` }; 
   }
 }
 
@@ -51,7 +51,13 @@ export default async function TransactionsDashboard({ searchParams }: { searchPa
         {monthData && <MonthlyChart data={monthData} />}
       </div>
 
-      {!txData || !txData.items || txData.items.length === 0 ? (
+      {txData?.error ? (
+        <div style={{ textAlign: 'center', padding: '4rem 0', color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', borderRadius: 'var(--border-radius)', border: '1px solid #ef4444' }}>
+          <h3>API Connection Failed</h3>
+          <p>{txData.error}</p>
+          <p style={{ fontSize: '0.875rem', marginTop: '1rem', color: '#8c8f96' }}>If you just deployed, the backend might be cold-starting. Wait 60 seconds and refresh.</p>
+        </div>
+      ) : !txData || !txData.items || txData.items.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem 0', color: '#8c8f96', background: 'rgba(255,255,255,0.02)', borderRadius: 'var(--border-radius)', border: '1px solid var(--border)' }}>
           <h3>No transactions found</h3>
           <p>Try adjusting your filters or checking back later.</p>
