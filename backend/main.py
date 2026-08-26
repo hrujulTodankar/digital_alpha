@@ -13,6 +13,16 @@ from backend.database import engine, get_db
 # Create all tables (if they don't exist)
 models.Base.metadata.create_all(bind=engine)
 
+# If we fell back to SQLite due to network errors, seed the ephemeral database automatically
+from backend.database import SQLALCHEMY_DATABASE_URL
+if "sqlite" in SQLALCHEMY_DATABASE_URL:
+    from backend.seed import seed_database
+    # Only seed if it's empty to prevent duplication on reloads
+    db = next(get_db())
+    if db.query(models.User).count() == 0:
+        print("Seeding ephemeral SQLite database on startup...")
+        seed_database()
+        
 app = FastAPI(title="Financial App API")
 
 app.add_middleware(

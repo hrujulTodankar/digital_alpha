@@ -44,8 +44,7 @@ def parse_date(ts):
     return datetime.utcnow()
 
 def seed_database():
-    engine = create_engine(DATABASE_URL)
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    from backend.database import engine, SessionLocal
     
     print("Creating tables...")
     Base.metadata.create_all(bind=engine)
